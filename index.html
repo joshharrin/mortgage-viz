@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f0e8">
+  <title>Mortgage Time Machine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <a class="brand" href="#" aria-label="Mortgage Time Machine home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <span>Mortgage<br>Time Machine</span>
+      </a>
+      <p class="header-title">Pay it off <em>years sooner.</em></p>
+    </header>
+
+    <section class="details-section">
+      <div class="details-heading">
+        <div>
+          <p class="section-number">01 / START HERE</p>
+          <h2>Enter your mortgage</h2>
+        </div>
+        <p class="details-guidance">Enter the original loan and today’s balance, rate, and term.</p>
+      </div>
+
+      <form class="mortgage-form" id="mortgageForm">
+        <label>
+          <span>Initial loan amount</span>
+          <div class="input-shell"><i>$</i><input id="initialLoan" type="number" min="1000" step="1000" value="500000"></div>
+        </label>
+        <label>
+          <span>Current loan balance</span>
+          <div class="input-shell"><i>$</i><input id="principal" type="number" min="1000" step="1000" value="450000"></div>
+        </label>
+        <label>
+          <span>Interest rate</span>
+          <div class="input-shell"><input id="rate" type="number" min="0.01" max="25" step="0.01" value="6.5"><i>%</i></div>
+        </label>
+        <label>
+          <span>Original loan term (not remaining)</span>
+          <div class="input-shell"><input id="originalTerm" type="number" min="1" max="50" step="1" value="30"><i>years</i></div>
+        </label>
+        <label>
+          <span>Property taxes escrowed by lender / year</span>
+          <div class="input-shell"><i>$</i><input id="propertyTax" type="number" min="0" step="100" value="5400"></div>
+        </label>
+        <label>
+          <span>Home insurance escrowed by lender / year</span>
+          <div class="input-shell"><i>$</i><input id="insurance" type="number" min="0" step="100" value="1800"></div>
+        </label>
+      </form>
+
+      <div class="payment-strip">
+        <div>
+          <span>Principal &amp; interest — current month</span>
+          <small id="piBreakdown">($407 principal + $2,438 interest)</small>
+          <strong id="basePayment">$2,844</strong>
+        </div>
+        <span class="plus">+</span>
+        <div>
+          <span>Escrow</span>
+          <small id="escrowBreakdown">($450 tax + $150 insurance)</small>
+          <strong id="escrowPayment">$600</strong>
+        </div>
+        <span class="plus">+</span>
+        <div><span>Extra principal</span><strong id="extraSummary">$500</strong></div>
+        <span class="equals">=</span>
+        <div class="total"><span>Total monthly outlay</span><strong id="totalPayment">$3,944</strong></div>
+      </div>
+      <p class="escrow-note"><strong>About this split:</strong> Principal and interest shows an estimate for the current month only. On a fixed-rate loan, the total payment stays level while the principal percentage rises and the interest percentage falls over time. Escrow means costs your lender collects monthly.</p>
+    </section>
+
+    <section class="control-panel">
+      <div class="slider-heading">
+        <div>
+          <p class="section-number">02 / EXTRA PRINCIPAL</p>
+          <h2>Choose your monthly boost</h2>
+        </div>
+        <div class="extra-display">
+          <span>$</span><output id="extraOutput" for="extraPayment">500</output><small>/mo</small>
+        </div>
+      </div>
+
+      <div class="range-wrap">
+        <input id="extraPayment" type="range" min="0" max="2500" step="25" value="500" aria-label="Additional monthly principal payment">
+        <div class="range-labels" aria-hidden="true">
+          <span>$0</span><span>$500</span><span>$1,000</span><span>$1,500</span><span>$2,000</span><span>$2,500</span>
+        </div>
+      </div>
+
+      <div class="quick-picks" aria-label="Quick additional payment choices">
+        <button type="button" data-extra="100">+$100</button>
+        <button type="button" data-extra="250">+$250</button>
+        <button type="button" data-extra="500" class="active">+$500</button>
+        <button type="button" data-extra="1000">+$1,000</button>
+      </div>
+    </section>
+
+    <section class="results">
+      <div class="result-card payoff-card">
+        <p class="section-number">YOUR NEW PAYOFF</p>
+        <div class="payoff-orbit" aria-label="Mortgage payoff summary">
+          <svg class="orbit-svg" viewBox="0 0 360 360" role="img">
+            <circle class="orbit-track" cx="180" cy="180" r="145"></circle>
+            <circle id="orbitProgress" class="orbit-progress" cx="180" cy="180" r="145"></circle>
+          </svg>
+          <div class="orbit-copy">
+            <span class="orbit-label">Paid off in</span>
+            <strong id="payoffYears">23.4</strong>
+            <span class="orbit-unit">years</span>
+            <span id="payoffDate" class="orbit-date">March 2049</span>
+          </div>
+          <span id="orbitSaved" class="orbit-saved">6.6 years back</span>
+        </div>
+      </div>
+
+      <div class="result-card years-card">
+        <p class="section-number">03 / TIME RECLAIMED</p>
+        <div class="big-stat">
+          <strong id="yearsSaved">6.6</strong>
+          <span>years<br>sooner</span>
+        </div>
+        <p id="paymentsSkipped" class="card-note">That’s 79 monthly payments you’ll never have to make.</p>
+        <div class="mini-calendar" id="calendar" aria-hidden="true"></div>
+      </div>
+
+      <div class="result-card interest-card">
+        <p class="section-number">04 / INTEREST AVOIDED</p>
+        <div class="big-stat money">
+          <span>$</span><strong id="interestSaved">112,482</strong>
+        </div>
+        <p class="card-note">Money that stays in your world, instead of disappearing into interest.</p>
+        <div class="coin-stack" id="coinStack" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="timeline-section">
+      <div class="timeline-heading">
+        <div>
+          <p class="section-number">05 / THE TIME TUNNEL</p>
+          <h2>See the finish line move</h2>
+        </div>
+        <p>Each block is one year.<br>The coral years disappear.</p>
+      </div>
+
+      <div class="timeline-legend">
+        <span><i class="dot original"></i>Original schedule</span>
+        <span><i class="dot accelerated"></i>New schedule</span>
+        <span><i class="dot reclaimed"></i>Time reclaimed</span>
+      </div>
+
+      <div class="timeline-row">
+        <div class="timeline-label"><span>Without extra</span><strong id="originalTermLabel">30 years</strong></div>
+        <div class="year-track original-track" id="originalTrack"></div>
+      </div>
+      <div class="timeline-row">
+        <div class="timeline-label"><span>With your boost</span><strong id="newTermLabel">23.4 years</strong></div>
+        <div class="year-track accelerated-track" id="acceleratedTrack"></div>
+      </div>
+    </section>
+
+    <section class="interest-plot-section">
+      <div class="plot-heading">
+        <div>
+          <p class="section-number">06 / INTEREST OVER TIME</p>
+          <h2>Watch interest<br>stop growing.</h2>
+        </div>
+        <div class="plot-totals">
+          <div><i class="plot-key original-key"></i><span>Original total</span><strong id="plotOriginalTotal">$574,000</strong></div>
+          <div><i class="plot-key accelerated-key"></i><span>With your boost</span><strong id="plotAcceleratedTotal">$462,000</strong></div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <svg id="interestChart" class="interest-chart" viewBox="0 0 1000 440" role="img" aria-labelledby="chartTitle chartDescription">
+          <title id="chartTitle">Cumulative mortgage interest over time</title>
+          <desc id="chartDescription">A comparison of cumulative interest paid on the original schedule and with additional monthly principal payments.</desc>
+          <defs>
+            <linearGradient id="savedGradient" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#d3ee72" stop-opacity="0"></stop>
+              <stop offset="60%" stop-color="#d3ee72" stop-opacity=".42"></stop>
+              <stop offset="100%" stop-color="#f27c62" stop-opacity=".68"></stop>
+            </linearGradient>
+          </defs>
+          <g id="chartGrid" class="chart-grid"></g>
+          <path id="savedArea" class="saved-area"></path>
+          <line id="payoffMarker" class="payoff-marker"></line>
+          <path id="originalInterestPath" class="interest-line original-line"></path>
+          <path id="acceleratedInterestPath" class="interest-line accelerated-line"></path>
+          <circle id="originalEndpoint" class="chart-endpoint original-endpoint" r="7"></circle>
+          <circle id="acceleratedEndpoint" class="chart-endpoint accelerated-endpoint" r="7"></circle>
+          <g id="payoffMarkerLabel" class="payoff-marker-label">
+            <rect width="128" height="42" rx="21"></rect>
+            <text x="64" y="17" text-anchor="middle">NEW FINISH LINE</text>
+            <text id="payoffMarkerYear" x="64" y="31" text-anchor="middle">YEAR 23.4</text>
+          </g>
+          <g id="savingsAnnotation" class="savings-annotation">
+            <line id="savingsLeader"></line>
+            <circle id="savingsTarget" r="5"></circle>
+            <g id="savingsCard">
+              <rect width="190" height="76" rx="9"></rect>
+              <text x="16" y="21">INTEREST AVOIDED</text>
+              <text id="chartSavings" class="savings-value" x="16" y="49">$112,482</text>
+              <text x="16" y="65">THE GAP IS MONEY KEPT</text>
+            </g>
+          </g>
+          <g id="chartLabels" class="chart-labels"></g>
+        </svg>
+      </div>
+    </section>
+
+    <footer>
+      <p><strong>Future you called.</strong> They said thanks.</p>
+      <p class="disclaimer">For illustration only. Estimates assume a fixed rate and monthly payments, and exclude taxes, insurance, fees, and prepayment penalties.</p>
+    </footer>
+  </main>
+
+  <script src="app.js?v=20260925-3"></script>
+</body>
+</html>
